@@ -2,9 +2,9 @@
     "Name": "CBTMovement",
     "Enabled": true,
 
-    "Version": "v0.4.0",
+    "Version": "v0.5.1",
     "Description": "Adopts Classic Battletech Tabletop movement rules",
-    "Author": "Joe Guetler",
+    "Author": "Joe Guetler", "Madranis"
     "Website": "",
     "Contact": "",
 

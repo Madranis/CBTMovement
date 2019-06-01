@@ -13,21 +13,27 @@ using JetBrains.Annotations;
 
 namespace CBTMovement
 {
-    [HarmonyPatch(typeof(EncounterLayerData))]
-    [HarmonyPatch("ContractInitialize")]
-    public static class EncounterLayerData_ContractInitialize_Patch
-    {
-        static void Prefix(EncounterLayerData __instance)
+
+
+    [HarmonyPatch(typeof(AbstractActor),"get_CanShootAfterSprinting")]
+    public static class AbstractActor_get_CanShootAfterSprinting_patch {
+        private static void Postfix(AbstractActor __instance, ref bool __result)
         {
-            try
-            {
-                __instance.turnDirectorBehavior = TurnDirectorBehaviorType.AlwaysInterleaved;
-            }
-            catch (Exception e)
-            {
-            }
+            __result = CBTMovement.inInterleaved;
         }
+
     }
+
+    [HarmonyPatch(typeof(TurnDirector),"set_IsInterleaved")]
+    public static class TurnDirector_set_IsInterleaved_patch {
+        private static void Postfix(TurnDirector __instance, bool value)
+        {
+            CBTMovement.inInterleaved = value;
+        }
+
+    }
+
+
 
     //public float GetAllModifiers(AbstractActor attacker, Weapon weapon, ICombatant target, Vector3 attackPosition, Vector3 targetPosition, LineOfFireLevel lofLevel, bool isCalledShot)
     [HarmonyPatch(typeof(ToHit), "GetAllModifiers")]
@@ -71,14 +77,6 @@ namespace CBTMovement
         }
     }
 
-    [HarmonyPatch(typeof(AbstractActor), "InitEffectStats")]
-    public static class AbstractActor_InitEffectStats_Patch
-    {
-        private static void Postfix(AbstractActor __instance)
-        {
-            __instance.StatCollection.Set("CanShootAfterSprinting", true);
-        }
-    }
 
     [HarmonyPatch(typeof(AbstractActor), "ResolveAttackSequence", null)]
     public static class AbstractActor_ResolveAttackSequence_Patch
@@ -127,6 +125,7 @@ namespace CBTMovement
 
     public static class CBTMovement
     {
+        public static bool inInterleaved;
         internal static ModSettings Settings;
 
         public static void Init(string modDir, string modSettings)
