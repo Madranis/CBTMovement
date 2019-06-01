@@ -4,13 +4,14 @@
 
     "Version": "v0.5.1",
     "Description": "Adopts Classic Battletech Tabletop movement rules",
-    "Author": "Joe Guetler", "Madranis"
+    "Author": "Joe Guetler, Madranis",
     "Website": "",
     "Contact": "",
 
 	"DLL": "CBTMovement.dll",
 
     "Settings": {
-        "ToHitSelfJumped": 2
+        "ToHitSelfJumped": 2,
+        "ForceInterleavedCombat": false,
     }
 }

@@ -13,6 +13,23 @@ using JetBrains.Annotations;
 
 namespace CBTMovement
 {
+    [HarmonyPatch(typeof(EncounterLayerData))]
+    [HarmonyPatch("ContractInitialize")]
+    public static class EncounterLayerData_ContractInitialize_Patch
+    {
+        static void Prefix(EncounterLayerData __instance)
+        {
+            if (CBTMovement.Settings.ForceInterleavedCombat) {
+                try {
+                    __instance.turnDirectorBehavior =
+                              TurnDirectorBehaviorType.AlwaysInterleaved;
+                    CBTMovement.inInterleaved = true;
+                }
+                catch {
+                }
+            }
+        }
+    }
 
 
     [HarmonyPatch(typeof(AbstractActor),"get_CanShootAfterSprinting")]
@@ -121,6 +138,8 @@ namespace CBTMovement
     {
         [JsonProperty("ToHitSelfJumped")]
         public int ToHitSelfJumped { get; set; }
+        [JsonProperty("ForceInterleavedCombat")]
+        public bool ForceInterleavedCombat = false;
     }
 
     public static class CBTMovement
