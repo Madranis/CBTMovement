@@ -47,7 +47,14 @@ namespace CBTMovement
         {
             CBTMovement.inInterleaved = value;
         }
+    }
 
+    [HarmonyPatch(typeof(TurnDirector),"InitFromSave")]
+    public static class TurnDirector_InitFromSave_patch {
+        private static void Postfix(TurnDirector __instance)
+        {
+            CBTMovement.inInterleaved = __instance.IsInterleaved;
+        }
     }
 
 
